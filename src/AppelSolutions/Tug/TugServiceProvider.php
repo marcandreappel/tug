@@ -1,6 +1,6 @@
 <?php
 
-namespace Tug;
+namespace AppelSolutions\Tug;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -18,7 +18,7 @@ class TugServiceProvider extends ServiceProvider {
     public function register()
     {
         if (! defined('TUG_PATH')) {
-            define('TUG_PATH', realpath(__DIR__.'/../'));
+            define('TUG_PATH', realpath(__DIR__.'/tug/'));
         }
     }
 

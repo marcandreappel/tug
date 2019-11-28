@@ -14,14 +14,14 @@
     ],
     "autoload": {
         "psr-4": {
-            "Tug\\": "src/"
+            "Tug\\": "src/AppelSolutions/Tug"
         }
     },
     "require": {},
     "extra": {
         "laravel": {
             "providers": [
-                "Tug\\TugServiceProvider"
+                "AppelSolutions\\Tug\\TugServiceProvider"
             ]
         }
     },
