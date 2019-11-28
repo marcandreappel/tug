@@ -1,12 +1,15 @@
 version: '2'
 services:
-  app:
-    build:
-      context: ./docker/app
-      dockerfile: Dockerfile
-    image: vessel/app
+  nginx:
+    image: marcandreappel/tug-nginx:latest
     ports:
-     - "${APP_PORT}:80"
+      - "${APP_PORT}:80"
+    volumes:
+    - .:/var/www/html
+  php-fpm:
+    image: marcandreappel/tug-php-fpm:latest
+    ports:
+     - "9000:9000"
     environment:
       CONTAINER_ENV: "${APP_ENV}"
       XDEBUG_HOST: "${XDEBUG_HOST}"
@@ -14,19 +17,19 @@ services:
     volumes:
      - .:/var/www/html
     networks:
-     - vessel
+     - tug
   node:
     build:
       context: ./docker/node
       dockerfile: Dockerfile
       args:
         uid: "${WWWUSER}"
-    image: vessel/node
+    image: tug/node
     user: node
     volumes:
      - .:/var/www/html
     networks:
-     - vessel
+     - tug
   mysql:
     image: mysql:5.7
     ports:
@@ -37,22 +40,22 @@ services:
       MYSQL_USER: "${DB_USERNAME}"
       MYSQL_PASSWORD: "${DB_PASSWORD}"
     volumes:
-     - vesselmysql:/var/lib/mysql
+     - tugmysql:/var/lib/mysql
      # - ./docker/mysql/conf.d:/etc/mysql/conf.d
      # - ./docker/mysql/logs:/var/log/mysql
     networks:
-     - vessel
+     - tug
   redis:
     image: redis:alpine
     volumes:
-     - vesselredis:/data
+     - tugredis:/data
     networks:
-     - vessel
+     - tug
 networks:
-  vessel:
+  tug:
     driver: "bridge"
 volumes:
-  vesselmysql:
+  tugmysql:
     driver: "local"
-  vesselredis:
+  tugredis:
     driver: "local"

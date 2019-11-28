@@ -1,44 +1,44 @@
-# Vessel
+# Tug
 
 Up and running with small Docker dev environments.
 
 ## Documentation
 
-Full documentation can be found at [https://vessel.shippingdocker.com](https://vessel.shippingdocker.com).
+Full documentation can be found at [https://tug.shippingdocker.com](https://tug.shippingdocker.com).
 
 ## Install
 
-Vessel is just a small set of files that sets up a local Docker-based dev environment per project. There is nothing to install globally, except Docker itself!
+Tug is just a small set of files that sets up a local Docker-based dev environment per project. There is nothing to install globally, except Docker itself!
 
 This is all there is to using it:
 
 ```bash
-composer require shipping-docker/vessel
-php artisan vendor:publish --provider="Vessel\VesselServiceProvider"
+composer require shipping-docker/tug
+php artisan vendor:publish --provider="Tug\TugServiceProvider"
 
 # Run this once to initialize project
 # Must run with "bash" until initialized
-bash vessel init
+bash tug init
 
-./vessel start
+./tug start
 ```
 
 Head to `http://localhost` in your browser and see your Laravel site!
 
 ## Lumen
 
-If you're using Lumen, you'll need to copy the Vessel files over manually instead of using `php artisan vendor:publish`. You can do this with this command:
+If you're using Lumen, you'll need to copy the Tug files over manually instead of using `php artisan vendor:publish`. You can do this with this command:
 
-    cp -R vendor/shipping-docker/vessel/docker-files/{vessel,docker-compose.yml,docker} .
+    cp -R vendor/shipping-docker/tug/docker-files/{tug,docker-compose.yml,docker} .
 
 and then you'll be able to install and continue as normal.
 
 
 ## Multiple Environments
 
-Vessel attempts to bind to port 80 and 3306 on your machine, so you can simply go to `http://localhost` in your browser.
+Tug attempts to bind to port 80 and 3306 on your machine, so you can simply go to `http://localhost` in your browser.
 
-However, if you run more than one instance of Vessel, you'll get an error when starting it; Each port can only be used once. To get around this, use a different port per project by setting the `APP_PORT` and `MYSQL_PORT` environment variables in one of two ways:
+However, if you run more than one instance of Tug, you'll get an error when starting it; Each port can only be used once. To get around this, use a different port per project by setting the `APP_PORT` and `MYSQL_PORT` environment variables in one of two ways:
 
 Within the `.env` file:
 
@@ -47,10 +47,10 @@ APP_PORT=8080
 MYSQL_PORT=33060
 ```
 
-Or when starting Vessel:
+Or when starting Tug:
 
 ```bash
-APP_PORT=8080 MYSQL_PORT=33060 ./vessel start
+APP_PORT=8080 MYSQL_PORT=33060 ./tug start
 ```
 
 Then you can view your project at `http://localhost:8080` and access your database locally from port `33060`;
@@ -59,7 +59,7 @@ Then you can view your project at `http://localhost:8080` and access your databa
 
 Since we bind the MySQL to port `3306`, SequelPro can access the database directly.
 
-![sequel pro access](https://s3.amazonaws.com/sfh-assets/vessel-sequel-pro.png)
+![sequel pro access](https://s3.amazonaws.com/sfh-assets/tug-sequel-pro.png)
 
 The password for user `root` is set by environment variable `DB_PASSWORD` from within the `.env` file.
 
@@ -67,71 +67,71 @@ The password for user `root` is set by environment variable `DB_PASSWORD` from w
 
 ## Common Commands
 
-Here's a list of built-in helpers you can use. Any command not defined in the `vessel` script will default to being passed to the `docker-compose` command. If not command is used, it will run `docker-compose ps` to list the running containers for this environment.
+Here's a list of built-in helpers you can use. Any command not defined in the `tug` script will default to being passed to the `docker-compose` command. If not command is used, it will run `docker-compose ps` to list the running containers for this environment.
 
-### Show Vessel Version or Help
+### Show Tug Version or Help
 
 ```bash
-# shows vessel current version
-$ vessel --version # or [ -v | version ]
+# shows tug current version
+$ tug --version # or [ -v | version ]
 
-# shows vessel help
-$ vessel --help # or [ -H | help ]
+# shows tug help
+$ tug --help # or [ -H | help ]
 ```
 
-### Starting and Stopping Vessel
+### Starting and Stopping Tug
 
 ```bash
 # Start the environment
-./vessel start
+./tug start
 
 ## This is equivalent to
-./vessel up -d
+./tug up -d
 
 # Stop the environment
-./vessel stop
+./tug stop
 
 ## This is equivalent to
-./vessel down
+./tug down
 ```
 
 ### Development
 
 ```bash
 # Use composer
-./vessel composer <cmd>
-./vessel comp <cmd> # "comp" is a shortcut to "composer"
+./tug composer <cmd>
+./tug comp <cmd> # "comp" is a shortcut to "composer"
 
 # Use artisan
-./vessel artisan <cmd>
-./vessel art <cmd> # "art" is a shortcut to "artisan"
+./tug artisan <cmd>
+./tug art <cmd> # "art" is a shortcut to "artisan"
 
 # Run tinker REPL
-./vessel tinker # "tinker" is a shortcut for "artisan tinker"
+./tug tinker # "tinker" is a shortcut for "artisan tinker"
 
 # Run phpunit tests
-./vessel test
+./tug test
 
 ## Example: You can pass anything you would to phpunit to this as well
-./vessel test --filter=some.phpunit.filter
-./vessel test tests/Unit/SpecificTest.php
+./tug test --filter=some.phpunit.filter
+./tug test tests/Unit/SpecificTest.php
 
 
 # Run npm
-./vessel npm <cmd>
+./tug npm <cmd>
 
 ## Example: install deps
-./vessel npm install
+./tug npm install
 
 # Run yarn
 
-./vessel yarn <cmd>
+./tug yarn <cmd>
 
 ## Example: install deps
-./vessel yarn install
+./tug yarn install
 
 # Run gulp
-./vessel gulp <cmd>
+./tug gulp <cmd>
 ```
 
 ### Docker Commands
@@ -140,36 +140,36 @@ As mentioned, anything not recognized as a built-in command will be used as an a
 
 ```bash
 # Both will list currently running containers and their status
-./vessel
-./vessel ps
+./tug
+./tug ps
 
 # Check log output of a container service
-./vessel logs # all container logs
-./vessel logs app # nginx | php logs
-./vessel logs mysql # mysql logs
-./vessel logs redis # redis logs
+./tug logs # all container logs
+./tug logs app # nginx | php logs
+./tug logs mysql # mysql logs
+./tug logs redis # redis logs
 
 ## Tail the logs to see output as it's generated
-./vessel logs -f # all logs
-./vessel logs -f app # nginx | php logs
+./tug logs -f # all logs
+./tug logs -f app # nginx | php logs
 
 ## Tail Laravel Logs
-./vessel exec app tail -f /var/www/html/storage/logs/laravel.log
+./tug exec app tail -f /var/www/html/storage/logs/laravel.log
 
 # Start a bash shell inside of a container
 # This is just like SSH'ing into a server
 # Note that changes to a container made this way will **NOT**
-#   survive through stopping and starting the vessel environment
+#   survive through stopping and starting the tug environment
 #   To install software or change server configuration, you'll need to
-#     edit the Dockerfile and run: ./vessel build
-./vessel exec app bash
+#     edit the Dockerfile and run: ./tug build
+./tug exec app bash
 
 # Example: mysqldump database "homestead" to local file system
 #          We must add the password in the command line this way
 #          This creates files "homestead.sql" on your local file system, not
 #          inside of the container
 # @link https://serversforhackers.com/c/mysql-in-dev-docker
-./vessel exec mysql mysqldump -u root -psecret homestead > homestead.sql
+./tug exec mysql mysqldump -u root -psecret homestead > homestead.sql
 ```
 
 
@@ -190,7 +190,7 @@ If you want to see how this workflow was developed, check out [Shipping Docker](
 
 ## Supported Systems
 
-Vessel requires Docker, and currently only works on Windows, Mac and Linux.
+Tug requires Docker, and currently only works on Windows, Mac and Linux.
 
 > Windows requires running Hyper-V.  Using Git Bash (MINGW64) and WSL are supported.  Native
   Windows is still under development.

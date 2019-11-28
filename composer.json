@@ -1,8 +1,12 @@
 {
-    "name": "shipping-docker/vessel",
-    "description": "Simple Docker dev environments",
+    "name": "marcandreappel/tug",
+    "description": "Even more simple Docker Laravel dev environment",
     "license": "MIT",
     "authors": [
+        {
+            "name": "Marc-André Appel",
+            "email": "marc-andre@appel.fun"
+        },
         {
             "name": "Chris Fidao",
             "email": "fideloper@gmail.com"
@@ -10,18 +14,18 @@
     ],
     "autoload": {
         "psr-4": {
-            "Vessel\\": "src/"
+            "Tug\\": "src/"
         }
     },
     "require": {},
     "extra": {
         "laravel": {
             "providers": [
-                "Vessel\\VesselServiceProvider"
+                "Tug\\TugServiceProvider"
             ]
         }
     },
     "scripts": {
-        "post-update-cmd": "echo 'VESSEL: Updates may require rebuilding your images.\nVESSEL: See https://github.com/shipping-docker/vessel/releases for details.'"
+        "post-update-cmd": "echo 'TUG: Updates may require rebuilding your images.\nTUG: See https://github.com/marcandreappel/tug/releases for details.'"
     }
 }

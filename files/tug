@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="4.0.2" # bumped to support vessel --help, vessel --version
+VERSION="1.0.0" # bumped to support tug --help, tug --version
 
 # define colors that are used in the help screen
 
@@ -62,7 +62,7 @@ export MYSQL_PORT=${MYSQL_PORT:-3306}
 export WWWUSER=${WWWUSER:-$UID}
 
 showVersion() {
-    intro="\n🐳 ${COL_GREEN}Vessel for Docker${COL_RESET}\n"
+    intro="\n🐳 ${COL_GREEN}Tug for Docker${COL_RESET}\n"
     intro="$intro   ${COL_CYAN}Version ${VERSION}\n${COL_RESET}"
 
     printf "$intro"
@@ -73,7 +73,7 @@ showHelp() {
     showVersion
 
     usage="${COL_LYELLOW}Usage:\n${COL_RESET}"
-    usage="$usage  ./vessel <cmd> <options>"
+    usage="$usage  ./tug <cmd> <options>"
 
     commands="${COL_LYELLOW}Commands:\n${COL_RESET}"
     commands="$commands  art | artisan <cmd>         Run Laravel Artisan CLI in ${COL_MAGENTA}${CONTAINER_APP}${COL_RESET} container\n"
@@ -99,15 +99,15 @@ showHelp() {
     options="$options --version, -V, version       Show Version\n"
 
     examples="${COL_LYELLOW}Examples:\n${COL_RESET}"
-    examples="$examples  ${COL_CYAN}$ ./vessel start${COL_RESET}\n"
-    examples="$examples  ${COL_CYAN}$ ./vessel stop${COL_RESET}\n"
-    examples="$examples  ${COL_CYAN}$ ./vessel dump${COL_RESET}\n"
-    examples="$examples  ${COL_CYAN}$ ./vessel logs # all container logs${COL_RESET}\n"
-    examples="$examples  ${COL_CYAN}$ ./vessel composer require <vendor/package>${COL_RESET}\n"
-    examples="$examples  ${COL_CYAN}$ ./vessel mysql${COL_RESET}\n"
-    examples="$examples  ${COL_CYAN}$ ./vessel artisan migrate --seed${COL_RESET}\n"
-    examples="$examples  ${COL_CYAN}$ ./vessel art db:seed${COL_RESET}\n"
-    examples="$examples  ${COL_CYAN}$ ./vessel test --filter=MyFilter${COL_RESET}\n"
+    examples="$examples  ${COL_CYAN}$ ./tug start${COL_RESET}\n"
+    examples="$examples  ${COL_CYAN}$ ./tug stop${COL_RESET}\n"
+    examples="$examples  ${COL_CYAN}$ ./tug dump${COL_RESET}\n"
+    examples="$examples  ${COL_CYAN}$ ./tug logs # all container logs${COL_RESET}\n"
+    examples="$examples  ${COL_CYAN}$ ./tug composer require <vendor/package>${COL_RESET}\n"
+    examples="$examples  ${COL_CYAN}$ ./tug mysql${COL_RESET}\n"
+    examples="$examples  ${COL_CYAN}$ ./tug artisan migrate --seed${COL_RESET}\n"
+    examples="$examples  ${COL_CYAN}$ ./tug art db:seed${COL_RESET}\n"
+    examples="$examples  ${COL_CYAN}$ ./tug test --filter=MyFilter${COL_RESET}\n"
 
     printf "\n"
     printf "$usage\n\n"
@@ -150,19 +150,19 @@ if [ $# -gt 0 ]; then
 
     # Edit .env file to set correct hostnames for mysql/redis
     if [ "$1" == "init" ]; then
-        echo "VESSEL: Initializing Vessel..."
-        COMPOSER=$(which composer)
+        echo "TUG: Initializing Tug..."
+#        COMPOSER=$(which composer)
 
-        echo "VESSEL: Installing Predis"
-        if [ -z "$COMPOSER" ]; then
-          docker run -u $UID --rm -it \
-            -v $(pwd):/opt \
-            -w /opt \
-            shippingdocker/php-composer:latest \
-            composer require predis/predis
-        else
-            $COMPOSER require predis/predis
-        fi
+#        echo "TUG: Installing Predis"
+#        if [ -z "$COMPOSER" ]; then
+#          docker run -u $UID --rm -it \
+#            -v $(pwd):/opt \
+#            -w /opt \
+#            shippingdocker/php-composer:latest \
+#            composer require predis/predis
+#        else
+#            $COMPOSER require predis/predis
+#        fi
 
         if [ ! -f .env ]; then
             echo "No .env file found within current working directory $(pwd)"
@@ -170,8 +170,8 @@ if [ $# -gt 0 ]; then
             exit 0
         fi
 
-        echo "VESSEL: Setting .env Variables"
-        cp .env .env.bak.vessel
+        echo "TUG: Setting .env Variables"
+        cp .env .env.bak.tug
 
         if [ ! -z "$(grep "DB_HOST" .env)" ]; then
             $SEDCMD "s/DB_HOST=.*/DB_HOST=mysql/" .env
@@ -201,20 +201,20 @@ if [ $# -gt 0 ]; then
             rm .env.bak
         fi
 
-        if [ ! -f vessel ]; then
-            echo "No vessel file found within current working directory $(pwd)"
+        if [ ! -f tug ]; then
+            echo "No tug file found within current working directory $(pwd)"
             echo "Have you run the artisan vendor:publish command yet?"
             exit 0
         fi
 
-        echo "VESSEL: Making vessel command available"
-        chmod +x vessel
+        echo "TUG: Making tug command available"
+        chmod +x tug
 
         echo ""
-        echo "VESSEL: Complete!"
-        echo "VESSEL: You can now use Vessel"
-        echo "VESSEL: Try starting it:"
-        echo "./vessel start"
+        echo "TUG: Complete!"
+        echo "TUG: You can now use Tug"
+        echo "TUG: Try starting it:"
+        echo "./tug start"
 
 
     # Start up containers
@@ -231,7 +231,7 @@ if [ $# -gt 0 ]; then
         shift 1
         if [ "$EXEC" == "yes" ]; then
             $COMPOSE exec \
-                -u vessel \
+                -u tug \
                 app \
                 php "$@"
         else
@@ -246,7 +246,7 @@ if [ $# -gt 0 ]; then
         shift 1
         if [ "$EXEC" == "yes" ]; then
             $COMPOSE exec \
-                -u vessel \
+                -u tug \
                 app \
                 php artisan "$@"
         else
@@ -261,7 +261,7 @@ if [ $# -gt 0 ]; then
         shift 1
         if [ "$EXEC" == "yes" ]; then
             $COMPOSE exec \
-                -u vessel \
+                -u tug \
                 app \
                 composer "$@"
         else
@@ -276,7 +276,7 @@ if [ $# -gt 0 ]; then
         shift 1
         if [ "$EXEC" == "yes" ]; then
             $COMPOSE exec \
-                -u vessel \
+                -u tug \
                 app \
                 ./vendor/bin/phpunit "$@"
         else
@@ -291,7 +291,7 @@ if [ $# -gt 0 ]; then
         shift 1
         if [ "$EXEC" == "yes" ]; then
             $COMPOSE exec \
-                -u vessel \
+                -u tug \
                 app \
                 php artisan tinker
         else
@@ -361,13 +361,13 @@ if [ $# -gt 0 ]; then
 
     # If "ssh" is used, pass-thru to "ssh"
     # inside a new container
-    # e.g.: ./vessel ssh app
-    # e.g.: ./vessel ssh mysql
+    # e.g.: ./tug ssh app
+    # e.g.: ./tug ssh mysql
     elif [ "$1" == "ssh" ]; then
         shift 1
         if [ "$EXEC" == "yes" ] && [ "$1" != "node" ]; then
             $COMPOSE exec \
-                -u vessel \
+                -u tug \
                 $1 \
                 bash
         else
